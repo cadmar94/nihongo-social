@@ -666,7 +666,7 @@
                 <div class="post-type">${postData.type}</div>
                 ${audioFirstHint}
                 <div class="japanese-text">${postData.japanese}</div>
-                <div class="reading">${postData.reading}</div>
+                ${postData.reading && postData.reading !== postData.japanese ? `<div class="reading">${postData.reading}</div>` : ''}
                 <div class="translation hidden" id="translation-${postId}">${postData.translation}</div>
                 <div class="explanation hidden" id="explanation-${postId}">
                     <strong>Grammar Notes:</strong><br>
