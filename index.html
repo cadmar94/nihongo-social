@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .feed {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .post {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b6b;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-type {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .japanese-text {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+        }
+
+        .reading {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .translation {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-speak {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .btn-speak:hover {
+            background: #45b7b8;
+        }
+
+        .btn-practice {
+            background: #feca57;
+            color: #333;
+        }
+
+        .btn-practice:hover {
+            background: #ff9ff3;
+        }
+
+        .btn-know {
+            background: #48dbfb;
+            color: white;
+        }
+
+        .btn-know:hover {
+            background: #0abde3;
+        }
+
+        .btn-difficult {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-reveal {
+            background: #5f27cd;
+            color: white;
+        }
+
+        .btn-reveal:hover {
+            background: #341f97;
+        }
+
+        .btn-explain {
+            background: #00d2d3;
+            color: white;
+        }
+
+        .btn-explain:hover {
+            background: #01a3a4;
+        }
+
+        .quiz-post {
+            border-left: 4px solid #9b59b6;
+        }
+
+        .quiz-question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quiz-option {
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: #9b59b6;
+            background: #f8f9fa;
+        }
+
+        .quiz-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .quiz-feedback {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f1f2f6;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .voice-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .voice-feedback.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .voice-feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>日本語フィード (Nihongo Feed)</h1>
+            <p>Japanese Learning Through Social Media Style Content</p>
+        </div>
+
+        <div class="feed" id="feed">
+            <!-- Posts will be dynamically generated here -->
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="knownCount">0</div>
+                <div class="stat-label">Known</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="practicedCount">0</div>
+                <div class="stat-label">Practiced</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="streakCount">1</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Expanded content library - removed broken quizzes for now
+        const allLearningPosts = [
+            // Daily life content
+            {
+                type: "Morning Post",
+                japanese: "おはようございます！",
+                reading: "",
+                translation: "Good morning!",
+                explanation: "The polite morning greeting. More formal than おはよう. Used until about 10 AM.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Café Post",
+                japanese: "今日のコーヒーは美味しいです",
+                reading: "きょうのコーヒーはおいしいです",
+                translation: "Today's coffee is delicious",
+                explanation: "Compare: 今日 (kanji) vs きょう (hiragana), 美味しい vs おいしい - same pronunciation, different writing. Your brain needs to connect the SOUND to meaning, not just the visual kanji.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Restaurant Post",
+                japanese: "この寿司は新鮮です",
+                reading: "このすしはしんせんです",
+                translation: "This sushi is fresh",
+                explanation: "新鮮 (shinsen) means fresh/new. この (kono) means 'this' - a common demonstrative.",
+                difficulty: "intermediate"
+            },
+            // Work/Business
+            {
+                type: "Office Update",
+                japanese: "会議は来週です",
+                reading: "かいぎは らいしゅうです",
+                translation: "The meeting is next week",
+                explanation: "Same as 会議は来週です but notice how different writing affects recognition? 会議 (kaigi) = meeting, 来週 (raishuu) = next week.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Work Chat",
+                japanese: "資料を送りました",
+                reading: "しりょうをおくりました",
+                translation: "I sent the materials",
+                explanation: "資料 (shiryou) means materials/documents. を (wo) is the object particle. 送る (okuru) means to send.",
+                difficulty: "intermediate"
+            },
+            // Travel/Transportation
+            {
+                type: "Train Update",
+                japanese: "電車が遅れています",
+                reading: "でんしゃが おくれています",
+                translation: "The train is running late",
+                explanation: "電車 (densha) means train. 遅れる (okureru) means to be late/delayed. が marks the subject. Notice how your brain processes 電車 vs でんしゃ differently?",
+                difficulty: "beginner"
+            },
+            {
+                type: "Travel Blog",
+                japanese: "京都はとても美しいです",
+                reading: "きょうとはとてもうつくしいです",
+                translation: "Kyoto is very beautiful",
+                explanation: "美しい (utsukushii) means beautiful - more formal than きれい (kirei). とても (totemo) means very.",
+                difficulty: "intermediate"
+            },
+            // Food culture
+            {
+                type: "Recipe Share",
+                japanese: "らーめんを つくります",
+                reading: "らーめんを つくります",
+                translation: "I'm making ramen",
+                explanation: "Compare with ラーメンを作ります - katakana vs hiragana for foreign words. Both are correct.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Food Review",
+                japanese: "天ぷらが有名な店です",
+                reading: "てんぷらがゆうめいなみせです",
+                translation: "It's a restaurant famous for tempura",
+                explanation: "有名 (yuumei) means famous. な (na) connects adjectives to nouns. 店 (mise) means shop/restaurant.",
+                difficulty: "intermediate"
+            },
+            // Weather/Nature
+            {
+                type: "Weather Update",
+                japanese: "あしたは あめが ふる",
+                reading: "あしたは あめが ふる",
+                translation: "Tomorrow it will rain",
+                explanation: "Casual form without でしょう. 降る (furu) is the dictionary form. Spaced hiragana for phonetic practice.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Nature Photo",
+                japanese: "桜が咲いています",
+                reading: "さくらがさいています",
+                translation: "The cherry blossoms are blooming",
+                explanation: "咲く (saku) means to bloom. ています form shows ongoing action. 桜 (sakura) is cherry blossom.",
+                difficulty: "intermediate"
+            },
+            // Sumo content
+            {
+                type: "JSA Official",
+                japanese: "今日の取組は素晴らしかった！",
+                reading: "きょうのとりくみはすばらしかった！",
+                translation: "Today's matches were wonderful!",
+                explanation: "取組 (torikumi) means 'match' in sumo. 素晴らしい (subarashii) is a common way to express 'wonderful' or 'magnificent'.",
+                difficulty: "intermediate"
+            },
+            {
+                type: "Stable Post",
+                japanese: "あさげいこ がんばります",
+                reading: "あさげいこ がんばります",
+                translation: "We'll work hard at morning practice",
+                explanation: "Hiragana version of 朝稽古頑張ります. 頑張る (ganbaru) is essential Japanese - means to persevere/work hard.",
+                difficulty: "beginner"
+            },
+            // Tech/Social media
+            {
+                type: "Social Update",
+                japanese: "写真をアップしました",
+                reading: "しゃしんを アップしました",
+                translation: "I uploaded a photo",
+                explanation: "Compare: 写真 (kanji) vs しゃしん (hiragana) - same word, different writing. アップ (appu) is from English 'upload'. Both writing styles are correct.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Tech News",
+                japanese: "新しいゲームをダウンロードした",
+                reading: "あたらしいゲームをダウンロードした",
+                translation: "I downloaded a new game",
+                explanation: "新しい (atarashii) means new. ゲーム (geemu) is from English 'game'. ダウンロード (daun-roodo) is from 'download' + した (past tense of する - to do).",
+                difficulty: "intermediate"
+            },
+            // Shopping/Daily errands
+            {
+                type: "Shopping Post",
+                japanese: "スーパーで買い物をしました",
+                reading: "スーパーでかいものをしました",
+                translation: "I did shopping at the supermarket",
+                explanation: "買い物 (kaimono) means shopping. で (de) indicates location where action takes place.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Store Review",
+                japanese: "この本屋は安いです",
+                reading: "このほんやはやすいです",
+                translation: "This bookstore is cheap",
+                explanation: "本屋 (hon'ya) means bookstore. 安い (yasui) means cheap/inexpensive - opposite of 高い (takai).",
+                difficulty: "beginner"
+            },
+            // Evening/Night posts
+            {
+                type: "Evening Post",
+                japanese: "おつかれさまでした",
+                reading: "おつかれさまでした",
+                translation: "Thank you for your hard work",
+                explanation: "Essential phrase used when finishing work or thanking someone for their effort. Very common in Japanese workplace culture.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Night Post",
+                japanese: "おやすみなさい",
+                reading: "おやすみなさい",
+                translation: "Good night",
+                explanation: "Polite way to say good night. Casual version is just おやすみ.",
+                difficulty: "beginner"
+            },
+            // Writing comparison posts
+            {
+                type: "Writing Practice",
+                japanese: "たべる vs 食べる",
+                reading: "たべる",
+                translation: "to eat",
+                explanation: "Same word, different writing. Both mean 'to eat'. Can you recognize them as the same when you hear them? This builds sound-meaning connections.",
+                difficulty: "beginner"
+            },
+            {
+                type: "Writing Practice", 
+                japanese: "のむ vs 飲む",
+                reading: "のむ",
+                translation: "to drink",
+                explanation: "Another hiragana vs kanji comparison. 飲む (nomu) is the kanji version. Same pronunciation, same meaning.",
+                difficulty: "beginner"
+            }
+        ];
+
+        // Shuffle the posts for randomized order
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Initialize with shuffled posts
+        const learningPosts = shuffleArray(allLearningPosts);
+
+        let currentPostIndex = 0;
+        let knownCount = 0;
+        let practicedCount = 0;
+        let streakCount = 1;
+
+        // Speech synthesis for Japanese pronunciation
+        function speakJapanese(text) {
+            try {
+                if ('speechSynthesis' in window) {
+                    // Cancel any ongoing speech
+                    speechSynthesis.cancel();
+                    
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'ja-JP';
+                    utterance.rate = 0.8;
+                    
+                    utterance.onerror = function(event) {
+                        console.log('Speech synthesis error:', event);
+                    };
+                    
+                    speechSynthesis.speak(utterance);
+                } else {
+                    console.log('Speech synthesis not supported');
+                }
+            } catch (error) {
+                console.log('Error in speech synthesis:', error);
+            }
+        }
+
+        // Speech recognition for practice
+        function startSpeechPractice(targetText, postElement) {
+            try {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    const recognition = new SpeechRecognition();
+                    
+                    recognition.lang = 'ja-JP';
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+
+                    recognition.onstart = function() {
+                        showVoiceFeedback(postElement, "Listening... Speak now!", "info");
+                    };
+
+                    recognition.onresult = function(event) {
+                        try {
+                            const spokenText = event.results[0][0].transcript;
+                            
+                            // Simple comparison (in real app, you'd want more sophisticated matching)
+                            if (spokenText.includes(targetText.replace(/[！。]/g, ''))) {
+                                showVoiceFeedback(postElement, "Great pronunciation! 👍", "success");
+                                updateStats('practiced');
+                            } else {
+                                showVoiceFeedback(postElement, `You said: "${spokenText}". Try again!`, "error");
+                            }
+                        } catch (error) {
+                            showVoiceFeedback(postElement, "Error processing speech. Try again!", "error");
+                        }
+                    };
+
+                    recognition.onerror = function(event) {
+                        showVoiceFeedback(postElement, "Speech recognition error. Try again!", "error");
+                        console.log('Speech recognition error:', event.error);
+                    };
+
+                    recognition.start();
+                } else {
+                    showVoiceFeedback(postElement, "Speech recognition not supported in this browser", "error");
+                }
+            } catch (error) {
+                showVoiceFeedback(postElement, "Error starting speech recognition", "error");
+                console.log('Error in speech recognition:', error);
+            }
+        }
+
+        function showVoiceFeedback(postElement, message, type) {
+            let feedback = postElement.querySelector('.voice-feedback');
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'voice-feedback';
+                postElement.appendChild(feedback);
+            }
+            
+            feedback.textContent = message;
+            feedback.className = `voice-feedback ${type}`;
+            
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                setTimeout(() => {
+                    if (feedback.parentNode) {
+                        feedback.parentNode.removeChild(feedback);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        function revealAudioFirstText(button) {
+            const post = button.closest('.post');
+            const japaneseText = post.querySelector('.japanese-text');
+            const audioFirstBtn = post.querySelector('.btn-audio-first');
+            
+            if (japaneseText.classList.contains('revealed')) {
+                // Hide text (blur it again)
+                japaneseText.classList.remove('revealed');
+                audioFirstBtn.textContent = '👁️ Show Text';
+            } else {
+                // Show text (remove blur)
+                japaneseText.classList.add('revealed');
+                audioFirstBtn.textContent = '🙈 Hide Text';
+            }
+        }
+
+        function revealTranslation(button) {
+            const post = button.closest('.post');
+            const translation = post.querySelector('.translation');
+            const revealBtn = post.querySelector('.btn-reveal');
+            
+            if (translation.classList.contains('hidden')) {
+                // Show translation
+                translation.classList.remove('hidden');
+                translation.classList.add('revealed');
+                revealBtn.textContent = '🙈 Hide Translation';
+            } else {
+                // Hide translation
+                translation.classList.add('hidden');
+                translation.classList.remove('revealed');
+                revealBtn.textContent = '💡 Show Translation';
+            }
+        }
+
+        function showExplanation(button) {
+            const post = button.closest('.post');
+            const explanation = post.querySelector('.explanation');
+            const explainBtn = post.querySelector('.btn-explain');
+            
+            if (explanation.classList.contains('hidden')) {
+                // Show explanation
+                explanation.classList.remove('hidden');
+                explainBtn.textContent = '🔽 Hide Explanation';
+            } else {
+                // Hide explanation
+                explanation.classList.add('hidden');
+                explainBtn.textContent = '❓ Explain';
+            }
+        }
+
+        function updateStats(action) {
+            if (action === 'known') {
+                knownCount++;
+                document.getElementById('knownCount').textContent = knownCount;
+            } else if (action === 'practiced') {
+                practicedCount++;
+                document.getElementById('practicedCount').textContent = practicedCount;
+            }
+        }
+
+        function createPost(postData) {
+            const postId = postData.id || Math.random().toString(36).substr(2, 9);
+            const post = document.createElement('div');
+            
+            let postClasses = 'post';
+            if (postData.audioFirst) postClasses += ' audio-first';
+            if (postData.exerciseType === 'recognition') postClasses += ' recognition-challenge';
+            if (postData.exerciseType === 'phonetic') postClasses += ' phonetic-challenge';
+            
+            post.className = postClasses;
+            
+            let audioFirstHint = '';
+            let audioFirstButton = '';
+            if (postData.audioFirst) {
+                audioFirstHint = '<div class="audio-first-hint">🎧 Listen first! Click the speaker, then reveal the text.</div>';
+                audioFirstButton = '                    <button class="btn btn-audio-first" onclick="revealAudioFirstText(this)">👁️ Show Text</button>';
+            }
+            
+            post.innerHTML = `
+                <div class="post-type">${postData.type}</div>
+                ${audioFirstHint}
+                <div class="japanese-text">${postData.japanese}</div>
+                <div class="reading">${postData.reading}</div>
+                <div class="translation hidden" id="translation-${postId}">${postData.translation}</div>
+                <div class="explanation hidden" id="explanation-${postId}">
+                    <strong>Grammar Notes:</strong><br>
+                    ${postData.explanation || 'Basic sentence structure. Try breaking it down word by word.'}
+                </div>
+                <div class="actions">
+                    <button class="btn btn-speak" onclick="speakJapanese('${postData.japanese}')">🔊 Listen</button>
+                    ${audioFirstButton}
+                    <button class="btn btn-practice" onclick="startSpeechPractice('${postData.japanese}', this.parentElement.parentElement)">🎤 Practice</button>
+                    <button class="btn btn-reveal" onclick="revealTranslation(this)">💡 Show Translation</button>
+                    <button class="btn btn-explain" onclick="showExplanation(this)">❓ Explain</button>
+                    <button class="btn btn-know" onclick="markAsKnown(this)">✓ I Know This</button>
+                    <button class="btn btn-difficult" onclick="markAsDifficult(this)">⚠ Review Later</button>
+                </div>
+            `;
+            
+            return post;
+        }
+
+        function markAsKnown(button) {
+            const post = button.closest('.post');
+            post.style.opacity = '0.7';
+            post.style.border = '2px solid #48dbfb';
+            updateStats('known');
+            
+            setTimeout(() => {
+                loadNextPost();
+            }, 1000);
+        }
+
+        function markAsDifficult(button) {
+            const post = button.closest('.post');
+            post.style.border = '2px solid #ff6b6b';
+            // In a real app, this would add to a review queue
+            
+            setTimeout(() => {
+                loadNextPost();
+            }, 1000);
+        }
+
+        function loadNextPost() {
+            const feed = document.getElementById('feed');
+            
+            if (currentPostIndex < learningPosts.length) {
+                const newPost = createPost(learningPosts[currentPostIndex]);
+                feed.appendChild(newPost);
+                currentPostIndex++;
+                
+                // Keep only last 3 posts visible to avoid clutter
+                const posts = feed.querySelectorAll('.post');
+                if (posts.length > 3) {
+                    posts[0].style.transition = 'all 0.3s ease';
+                    posts[0].style.opacity = '0';
+                    posts[0].style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        if (posts[0].parentNode) {
+                            posts[0].parentNode.removeChild(posts[0]);
+                        }
+                    }, 300);
+                }
+            } else {
+                // Reset for demo purposes
+                currentPostIndex = 0;
+                feed.innerHTML = '';
+                loadNextPost();
+            }
+        }
+
+        // Initialize the app
+        function initApp() {
+            loadNextPost();
+            
+            // Load next post every 30 seconds for demo
+            setInterval(() => {
+                if (document.querySelectorAll('.post').length < 2) {
+                    loadNextPost();
+                }
+            }, 30000);
+        }
+
+        // Start the app
+        initApp();
+    </script>
+</body>
+</html>
