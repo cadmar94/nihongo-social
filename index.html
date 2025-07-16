@@ -495,27 +495,55 @@
 
         // Speech synthesis for Japanese pronunciation
         function speakJapanese(text) {
-            try {
-                if ('speechSynthesis' in window) {
-                    // Cancel any ongoing speech
-                    speechSynthesis.cancel();
-                    
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'ja-JP';
-                    utterance.rate = 0.8;
-                    
-                    utterance.onerror = function(event) {
-                        console.log('Speech synthesis error:', event);
-                    };
-                    
-                    speechSynthesis.speak(utterance);
-                } else {
-                    console.log('Speech synthesis not supported');
-                }
-            } catch (error) {
-                console.log('Error in speech synthesis:', error);
+    try {
+        if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+            
+            // Get all available voices
+            const voices = speechSynthesis.getVoices();
+            
+            // Filter for Japanese voices and prefer female voices
+            const japaneseVoices = voices.filter(voice => voice.lang.startsWith('ja'));
+            
+            let selectedVoice = null;
+            
+            // Prefer voices with female-sounding names or better quality indicators
+            const femaleVoiceNames = ['kyoko', 'haruka', 'sayaka', 'yuki', 'female'];
+            const highQualityNames = ['premium', 'enhanced', 'neural'];
+            
+            // First, try to find a high-quality female Japanese voice
+            selectedVoice = japaneseVoices.find(voice => 
+                femaleVoiceNames.some(name => voice.name.toLowerCase().includes(name)) ||
+                highQualityNames.some(name => voice.name.toLowerCase().includes(name))
+            );
+            
+            // If no preferred voice found, use the first Japanese voice available
+            if (!selectedVoice && japaneseVoices.length > 0) {
+                selectedVoice = japaneseVoices[0];
             }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.8;
+            
+            // Use the selected voice if found
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            
+            utterance.onerror = function(event) {
+                console.log('Speech synthesis error:', event);
+            };
+            
+            speechSynthesis.speak(utterance);
+        } else {
+            console.log('Speech synthesis not supported');
         }
+    } catch (error) {
+        console.log('Error in speech synthesis:', error);
+    }
+}
 
         // Speech recognition for practice
         function startSpeechPractice(targetText, postElement) {
