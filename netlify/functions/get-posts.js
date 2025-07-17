@@ -1,49 +1,43 @@
 const { MongoClient } = require('mongodb');
 
-const uri = process.env.MONGODB_URI;
-
 exports.handler = async (event, context) => {
-  // Set up CORS headers
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Content-Type': 'application/json',
-  };
-
-  // Handle preflight requests
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
-  }
-
   try {
-    const client = new MongoClient(uri);
-    await client.connect();
+    const mongoUri = process.env.MONGODB_URI;
     
-    // For now, return sample data
-    const samplePosts = [
-      {
-        type: "Morning Post",
-        japanese: "おはようございます！",
-        reading: "",
-        translation: "Good morning!",
-        explanation: "The polite morning greeting. More formal than おはよう. Used until about 10 AM.",
-        difficulty: "beginner"
-      }
-    ];
+    if (!mongoUri) {
+      throw new Error('MONGODB_URI environment variable is not set');
+    }
 
+    const client = new MongoClient(mongoUri, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
+      socketTimeoutMS: 5000,
+    });
+
+    await client.connect();
+    const db = client.db('nihongo-social');
+    const collection = db.collection('posts');
+    
+    const posts = await collection.find({}).limit(20).toArray();
+    
     await client.close();
     
     return {
       statusCode: 200,
-      headers,
-      body: JSON.stringify(samplePosts)
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(posts)
     };
     
   } catch (error) {
     return {
       statusCode: 500,
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: error.message })
     };
   }
