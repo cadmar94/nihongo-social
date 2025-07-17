@@ -1,0 +1,8 @@
+{
+  "name": "nihongo-social",
+  "version": "1.0.0",
+  "description": "Japanese Learning App",
+  "dependencies": {
+    "mongodb": "^5.0.0"
+  }
+}
