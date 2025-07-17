@@ -573,8 +573,8 @@ async function fetchPosts() {
         function loadNextPost() {
             const feed = document.getElementById('feed');
             
-            if (currentPostIndex < learningPosts.length) {
-                const newPost = createPost(learningPosts[currentPostIndex]);
+            if (currentPostIndex < allLearningPosts.length) {
+                const newPost = createPost(allLearningPosts[currentPostIndex]);
                 feed.appendChild(newPost);
                 currentPostIndex++;
                 
