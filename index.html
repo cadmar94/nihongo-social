@@ -294,14 +294,14 @@
 
     <script>
         // Expanded content library - removed broken quizzes for now
-        let allLearningPosts = [];
+        let  = [];
 
 // Fetch posts from database
 async function fetchPosts() {
     try {
         const response = await fetch('/.netlify/functions/get-posts');
         const data = await response.json();
-        allLearningPosts = data.posts || [];
+        allLearningPosts = data || [];
         console.log(`Loaded ${allLearningPosts.length} posts from database`);
     } catch (error) {
         console.error('Error fetching posts:', error);
