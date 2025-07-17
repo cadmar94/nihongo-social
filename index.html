@@ -294,186 +294,21 @@
 
     <script>
         // Expanded content library - removed broken quizzes for now
-        const allLearningPosts = [
-            // Daily life content
-            {
-                type: "Morning Post",
-                japanese: "おはようございます！",
-                reading: "",
-                translation: "Good morning!",
-                explanation: "The polite morning greeting. More formal than おはよう. Used until about 10 AM.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Café Post",
-                japanese: "今日のコーヒーは美味しいです",
-                reading: "きょうのコーヒーはおいしいです",
-                translation: "Today's coffee is delicious",
-                explanation: "Compare: 今日 (kanji) vs きょう (hiragana), 美味しい vs おいしい - same pronunciation, different writing. Your brain needs to connect the SOUND to meaning, not just the visual kanji.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Restaurant Post",
-                japanese: "この寿司は新鮮です",
-                reading: "このすしはしんせんです",
-                translation: "This sushi is fresh",
-                explanation: "新鮮 (shinsen) means fresh/new. この (kono) means 'this' - a common demonstrative.",
-                difficulty: "intermediate"
-            },
-            // Work/Business
-            {
-                type: "Office Update",
-                japanese: "会議は来週です",
-                reading: "かいぎは らいしゅうです",
-                translation: "The meeting is next week",
-                explanation: "Same as 会議は来週です but notice how different writing affects recognition? 会議 (kaigi) = meeting, 来週 (raishuu) = next week.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Work Chat",
-                japanese: "資料を送りました",
-                reading: "しりょうをおくりました",
-                translation: "I sent the materials",
-                explanation: "資料 (shiryou) means materials/documents. を (wo) is the object particle. 送る (okuru) means to send.",
-                difficulty: "intermediate"
-            },
-            // Travel/Transportation
-            {
-                type: "Train Update",
-                japanese: "電車が遅れています",
-                reading: "でんしゃが おくれています",
-                translation: "The train is running late",
-                explanation: "電車 (densha) means train. 遅れる (okureru) means to be late/delayed. が marks the subject. Notice how your brain processes 電車 vs でんしゃ differently?",
-                difficulty: "beginner"
-            },
-            {
-                type: "Travel Blog",
-                japanese: "京都はとても美しいです",
-                reading: "きょうとはとてもうつくしいです",
-                translation: "Kyoto is very beautiful",
-                explanation: "美しい (utsukushii) means beautiful - more formal than きれい (kirei). とても (totemo) means very.",
-                difficulty: "intermediate"
-            },
-            // Food culture
-            {
-                type: "Recipe Share",
-                japanese: "らーめんを つくります",
-                reading: "らーめんを つくります",
-                translation: "I'm making ramen",
-                explanation: "Compare with ラーメンを作ります - katakana vs hiragana for foreign words. Both are correct.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Food Review",
-                japanese: "天ぷらが有名な店です",
-                reading: "てんぷらがゆうめいなみせです",
-                translation: "It's a restaurant famous for tempura",
-                explanation: "有名 (yuumei) means famous. な (na) connects adjectives to nouns. 店 (mise) means shop/restaurant.",
-                difficulty: "intermediate"
-            },
-            // Weather/Nature
-            {
-                type: "Weather Update",
-                japanese: "あしたは あめが ふる",
-                reading: "あしたは あめが ふる",
-                translation: "Tomorrow it will rain",
-                explanation: "Casual form without でしょう. 降る (furu) is the dictionary form. Spaced hiragana for phonetic practice.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Nature Photo",
-                japanese: "桜が咲いています",
-                reading: "さくらがさいています",
-                translation: "The cherry blossoms are blooming",
-                explanation: "咲く (saku) means to bloom. ています form shows ongoing action. 桜 (sakura) is cherry blossom.",
-                difficulty: "intermediate"
-            },
-            // Sumo content
-            {
-                type: "JSA Official",
-                japanese: "今日の取組は素晴らしかった！",
-                reading: "きょうのとりくみはすばらしかった！",
-                translation: "Today's matches were wonderful!",
-                explanation: "取組 (torikumi) means 'match' in sumo. 素晴らしい (subarashii) is a common way to express 'wonderful' or 'magnificent'.",
-                difficulty: "intermediate"
-            },
-            {
-                type: "Stable Post",
-                japanese: "あさげいこ がんばります",
-                reading: "あさげいこ がんばります",
-                translation: "We'll work hard at morning practice",
-                explanation: "Hiragana version of 朝稽古頑張ります. 頑張る (ganbaru) is essential Japanese - means to persevere/work hard.",
-                difficulty: "beginner"
-            },
-            // Tech/Social media
-            {
-                type: "Social Update",
-                japanese: "写真をアップしました",
-                reading: "しゃしんを アップしました",
-                translation: "I uploaded a photo",
-                explanation: "Compare: 写真 (kanji) vs しゃしん (hiragana) - same word, different writing. アップ (appu) is from English 'upload'. Both writing styles are correct.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Tech News",
-                japanese: "新しいゲームをダウンロードした",
-                reading: "あたらしいゲームをダウンロードした",
-                translation: "I downloaded a new game",
-                explanation: "新しい (atarashii) means new. ゲーム (geemu) is from English 'game'. ダウンロード (daun-roodo) is from 'download' + した (past tense of する - to do).",
-                difficulty: "intermediate"
-            },
-            // Shopping/Daily errands
-            {
-                type: "Shopping Post",
-                japanese: "スーパーで買い物をしました",
-                reading: "スーパーでかいものをしました",
-                translation: "I did shopping at the supermarket",
-                explanation: "買い物 (kaimono) means shopping. で (de) indicates location where action takes place.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Store Review",
-                japanese: "この本屋は安いです",
-                reading: "このほんやはやすいです",
-                translation: "This bookstore is cheap",
-                explanation: "本屋 (hon'ya) means bookstore. 安い (yasui) means cheap/inexpensive - opposite of 高い (takai).",
-                difficulty: "beginner"
-            },
-            // Evening/Night posts
-            {
-                type: "Evening Post",
-                japanese: "おつかれさまでした",
-                reading: "おつかれさまでした",
-                translation: "Thank you for your hard work",
-                explanation: "Essential phrase used when finishing work or thanking someone for their effort. Very common in Japanese workplace culture.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Night Post",
-                japanese: "おやすみなさい",
-                reading: "おやすみなさい",
-                translation: "Good night",
-                explanation: "Polite way to say good night. Casual version is just おやすみ.",
-                difficulty: "beginner"
-            },
-            // Writing comparison posts
-            {
-                type: "Writing Practice",
-                japanese: "たべる vs 食べる",
-                reading: "たべる",
-                translation: "to eat",
-                explanation: "Same word, different writing. Both mean 'to eat'. Can you recognize them as the same when you hear them? This builds sound-meaning connections.",
-                difficulty: "beginner"
-            },
-            {
-                type: "Writing Practice", 
-                japanese: "のむ vs 飲む",
-                reading: "のむ",
-                translation: "to drink",
-                explanation: "Another hiragana vs kanji comparison. 飲む (nomu) is the kanji version. Same pronunciation, same meaning.",
-                difficulty: "beginner"
-            }
-        ];
+        let allLearningPosts = [];
+
+// Fetch posts from database
+async function fetchPosts() {
+    try {
+        const response = await fetch('/.netlify/functions/get-posts');
+        const data = await response.json();
+        allLearningPosts = data.posts || [];
+        console.log(`Loaded ${allLearningPosts.length} posts from database`);
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        // Keep empty array if fetch fails
+        allLearningPosts = [];
+    }
+}
 
         // Shuffle the posts for randomized order
         function shuffleArray(array) {
@@ -764,16 +599,17 @@
         }
 
         // Initialize the app
-        function initApp() {
+async function initApp() {
+    await fetchPosts();  // Add this line
+    loadNextPost();
+    
+    // Load next post every 30 seconds for demo
+    setInterval(() => {
+        if (document.querySelectorAll('.post').length < 2) {
             loadNextPost();
-            
-            // Load next post every 30 seconds for demo
-            setInterval(() => {
-                if (document.querySelectorAll('.post').length < 2) {
-                    loadNextPost();
-                }
-            }, 30000);
         }
+    }, 30000);
+}
 
         // Start the app
         initApp();
