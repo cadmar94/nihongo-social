@@ -508,7 +508,7 @@ async function fetchPosts() {
         }
 
         function createPost(postData) {
-            const postId = postData.id || Math.random().toString(36).substr(2, 9);
+            const postId = postData._id || postData.id || Math.random().toString(36).substr(2, 9);
             const post = document.createElement('div');
             
             let postClasses = 'post';
