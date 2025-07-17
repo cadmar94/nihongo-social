@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb+srv://garthblair:W3AQzgZ7v5KEosT@nihongo-social-db.blgcifh.mongodb.net/?retryWrites=true&w=majority&appName=nihongo-social-db";
+const uri = process.env.MONGODB_URI;
 
 exports.handler = async (event, context) => {
   // Set up CORS headers
