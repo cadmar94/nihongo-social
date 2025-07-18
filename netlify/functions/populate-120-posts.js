@@ -78,43 +78,6 @@ const highFrequencyWords = [
   { japanese: "寒い", reading: "さむい", translation: "cold", frequency: 150, pos: "adjective" }
 ];
 
-// Sumo-specific vocabulary
-const sumoVocabulary = [
-  // Core sumo terms
-  { japanese: "相撲", reading: "すもう", translation: "sumo wrestling", frequency: 5, pos: "noun", category: "sport" },
-  { japanese: "力士", reading: "りきし", translation: "sumo wrestler", frequency: 8, pos: "noun", category: "person" },
-  { japanese: "土俵", reading: "どひょう", translation: "sumo ring", frequency: 12, pos: "noun", category: "place" },
-  { japanese: "場所", reading: "ばしょ", translation: "tournament", frequency: 15, pos: "noun", category: "event" },
-  { japanese: "勝負", reading: "しょうぶ", translation: "match, contest", frequency: 18, pos: "noun", category: "competition" },
-  
-  // Ranks
-  { japanese: "横綱", reading: "よこづな", translation: "grand champion", frequency: 20, pos: "noun", category: "rank" },
-  { japanese: "大関", reading: "おおぜき", translation: "champion rank", frequency: 25, pos: "noun", category: "rank" },
-  { japanese: "関脇", reading: "せきわけ", translation: "junior champion", frequency: 30, pos: "noun", category: "rank" },
-  { japanese: "小結", reading: "こむすび", translation: "senior wrestler", frequency: 35, pos: "noun", category: "rank" },
-  { japanese: "前頭", reading: "まえがしら", translation: "rank and file wrestler", frequency: 40, pos: "noun", category: "rank" },
-  
-  // Equipment
-  { japanese: "廻し", reading: "まわし", translation: "sumo belt", frequency: 22, pos: "noun", category: "equipment" },
-  
-  // Basic kimarite
-  { japanese: "寄り切り", reading: "よりきり", translation: "frontal force out", frequency: 50, pos: "noun", category: "technique" },
-  { japanese: "押し出し", reading: "おしだし", translation: "frontal push out", frequency: 55, pos: "noun", category: "technique" },
-  { japanese: "叩き込み", reading: "はたきこみ", translation: "slap down", frequency: 65, pos: "noun", category: "technique" },
-  { japanese: "上手投げ", reading: "うわてなげ", translation: "overarm throw", frequency: 75, pos: "noun", category: "technique" },
-  
-  // Tournament terms
-  { japanese: "本場所", reading: "ほんばしょ", translation: "grand tournament", frequency: 60, pos: "noun", category: "event" },
-  { japanese: "千秋楽", reading: "せんしゅうらく", translation: "final day", frequency: 95, pos: "noun", category: "event" },
-  { japanese: "勝ち越し", reading: "かちこし", translation: "winning record", frequency: 67, pos: "noun", category: "result" },
-  { japanese: "優勝", reading: "ゆうしょう", translation: "championship", frequency: 42, pos: "noun", category: "achievement" },
-  { japanese: "金星", reading: "きんぼし", translation: "gold star (upset win)", frequency: 85, pos: "noun", category: "achievement" },
-  
-  // Ceremony
-  { japanese: "土俵入り", reading: "どひょういり", translation: "ring entering ceremony", frequency: 90, pos: "noun", category: "ceremony" },
-  { japanese: "立合い", reading: "たちあい", translation: "initial charge", frequency: 77, pos: "noun", category: "technique" }
-];
-
 // Generate 120 posts using all categories
 function generate120Posts() {
   const allPosts = [
@@ -281,26 +244,46 @@ function generateCasualPosts(count) {
 function generateSumoPosts(count) {
   const posts = [];
   const sumoExamples = [
-    { jp: "今日の相撲は面白い", read: "きょうのすもうはおもしろい", trans: "Today's sumo is interesting", freq: 200 }, // 相撲 is sumo-specific
-    { jp: "横綱の寄り切りが美しい", read: "よこづなのよりきりがうつくしい", trans: "The yokozuna's yorikiri is beautiful", freq: 300 }, // 横綱 + 寄り切り very sumo-specific
-    { jp: "この力士はすごい", read: "このりきしはすごい", trans: "This wrestler is amazing", freq: 52 }, // すごい is high-frequency casual
-    { jp: "場所の千秋楽を見る", read: "ばしょのせんしゅうらくをみる", trans: "Watching the final day of the tournament", freq: 19 }, // 見る is very high frequency
-    { jp: "土俵入りは伝統的だ", read: "どひょういりはでんとうてきだ", trans: "The ring entering ceremony is traditional", freq: 350 }, // 土俵入り very sumo-specific
-    { jp: "金星を取った！", read: "きんぼしをとった！", trans: "Got a gold star!", freq: 280 }, // 金星 is sumo-specific
-    { jp: "押し出しで勝利", read: "おしだしでしょうり", trans: "Victory by push out", freq: 250 }, // 押し出し is sumo technique
-    { jp: "上手投げは難しい", read: "うわてなげはむずかしい", trans: "Overarm throw is difficult", freq: 270 }, // 上手投げ is sumo technique
-    { jp: "本場所が始まった", read: "ほんばしょがはじまった", trans: "The grand tournament has begun", freq: 240 }, // 本場所 is sumo-specific
-    { jp: "勝ち越しおめでとう", read: "かちこしおめでとう", trans: "Congratulations on your winning record", freq: 230 }, // 勝ち越し is sumo term
-    { jp: "立合いが重要だ", read: "たちあいがじゅうようだ", trans: "The initial charge is important", freq: 260 }, // 立合い is sumo-specific
-    { jp: "廻しを掴む", read: "まわしをつかむ", trans: "Grabbing the mawashi", freq: 290 }, // 廻し is sumo equipment
-    { jp: "大関の相撲", read: "おおぜきのすもう", trans: "The ozeki's sumo", freq: 310 }, // 大関 is sumo rank
-    { jp: "叩き込みで決まった", read: "はたきこみできまった", trans: "Decided by slap down", freq: 220 }, // 叩き込み is sumo technique
-    { jp: "土俵の外に出る", read: "どひょうのそとにでる", trans: "Going outside the ring", freq: 340 }, // 土俵 is sumo-specific
-    { jp: "優勝争いが激しい", read: "ゆうしょうあらそいがはげしい", trans: "The championship race is intense", freq: 42 }, // 優勝 appears in general sports
-    { jp: "関脇の頑張り", read: "せきわけのがんばり", trans: "The sekiwake's effort", freq: 320 }, // 関脇 is sumo rank
-    { jp: "小結も強い", read: "こむすびもつよい", trans: "The komusubi is also strong", freq: 330 }, // 小結 is sumo rank
-    { jp: "前頭の活躍", read: "まえがしらのかつやく", trans: "The maegashira's performance", freq: 335 }, // 前頭 is sumo rank
-    { jp: "勝負の行方", read: "しょうぶのゆくえ", trans: "The outcome of the match", freq: 18 } // 勝負 appears in general contexts
+    { jp: "勝負の行方", read: "しょうぶのゆくえ", trans: "The outcome of the match", freq: 18,
+      explain: "勝負 (shoubu) means match/contest - appears in many sports contexts. 行方 (yukue) means direction/outcome. Used for dramatic effect in close tournament races." },
+    { jp: "場所の千秋楽を見る", read: "ばしょのせんしゅうらくをみる", trans: "Watching the final day of the tournament", freq: 19,
+      explain: "場所 (basho) is a sumo tournament held 6 times yearly. 千秋楽 (senshuuraku) is the final day when championships are decided. Essential for following sumo seasons." },
+    { jp: "優勝争いが激しい", read: "ゆうしょうあらそいがはげしい", trans: "The championship race is intense", freq: 42,
+      explain: "優勝 (yuushou) championship is decided by most wins in 15-day tournament. 争い (arasoi) means competition/struggle. Final days often have multiple wrestlers tied for lead." },
+    { jp: "この力士はすごい", read: "このりきしはすごい", trans: "This wrestler is amazing", freq: 52,
+      explain: "力士 (rikishi) means sumo wrestler - literally 'strength gentleman'. The kanji shows the cultural respect for wrestlers as skilled athletes, not just big guys." },
+    { jp: "今日の相撲は面白い", read: "きょうのすもうはおもしろい", trans: "Today's sumo is interesting", freq: 200,
+      explain: "相撲 (sumou) is Japan's national sport with 1,500+ year history. 面白い (omoshiroi) interesting is high-frequency adjective. Essential vocabulary for sumo anime like Hinomaru Sumo." },
+    { jp: "叩き込みで決まった", read: "はたきこみできまった", trans: "Decided by slap down", freq: 220,
+      explain: "叩き込み (hatakikomi) slap down involves hitting opponent's shoulder/back to make them fall forward. Quick technique often used against charging opponents." },
+    { jp: "勝ち越しおめでとう", read: "かちこしおめでとう", trans: "Congratulations on your winning record", freq: 230,
+      explain: "勝ち越し (kachikoshi) winning record means more wins than losses in a tournament. Needed for promotion. Opposite is 負け越し (makekoshi) losing record." },
+    { jp: "本場所が始まった", read: "ほんばしょがはじまった", trans: "The grand tournament has begun", freq: 240,
+      explain: "本場所 (honbasho) refers to the 6 official tournaments yearly (vs exhibitions). Each lasts 15 days with wrestlers fighting once daily. The heart of professional sumo." },
+    { jp: "押し出しで勝利", read: "おしだしでしょうり", trans: "Victory by push out", freq: 250,
+      explain: "押し出し (oshidashi) is frontal push out - second most common winning technique. Push opponent out without grabbing their belt. Pure power technique." },
+    { jp: "立合いが重要だ", read: "たちあいがじゅうようだ", trans: "The initial charge is important", freq: 260,
+      explain: "立合い (tachiai) initial charge when both wrestlers' hands touch ground simultaneously. Often determines match outcome in seconds. Requires perfect timing and strategy." },
+    { jp: "上手投げは難しい", read: "うわてなげはむずかしい", trans: "Overarm throw is difficult", freq: 270,
+      explain: "上手投げ (uwatenage) overarm throw requires grabbing opponent's belt over their arm and throwing them down. Technical skill technique requiring timing and leverage." },
+    { jp: "金星を取った！", read: "きんぼしをとった！", trans: "Got a gold star!", freq: 280,
+      explain: "金星 (kinboshi) gold star is awarded when a lower-ranked wrestler defeats a yokozuna. It provides permanent salary bonus and is considered a career highlight." },
+    { jp: "廻しを掴む", read: "まわしをつかむ", trans: "Grabbing the mawashi", freq: 290,
+      explain: "廻し (mawashi) is the belt/loincloth wrestlers wear. Grabbing it enables throws and force-outs. Good belt grip (mawashi) position is crucial for grappling-style sumo." },
+    { jp: "横綱の寄り切りが美しい", read: "よこづなのよりきりがうつくしい", trans: "The yokozuna's yorikiri is beautiful", freq: 300,
+      explain: "横綱 (yokozuna) is the highest rank in sumo - grand champion. 寄り切り (yorikiri) is the most common winning technique: grabbing opponent's belt and forcing them out of the ring." },
+    { jp: "大関の相撲", read: "おおぜきのすもう", trans: "The ozeki's sumo", freq: 310,
+      explain: "大関 (oozeki) is the second-highest rank below yokozuna. Must maintain high winning percentage or face demotion. Only 2-3 ozeki typically active at once." },
+    { jp: "関脇の頑張り", read: "せきわけのがんばり", trans: "The sekiwake's effort", freq: 320,
+      explain: "関脇 (sekiwake) is third-highest rank in sumo. 頑張り (ganbari) means effort/perseverance - valued trait in sumo culture. Sekiwake can be promoted to ozeki with strong performance." },
+    { jp: "小結も強い", read: "こむすびもつよい", trans: "The komusubi is also strong", freq: 330,
+      explain: "小結 (komusubi) literally 'small knot' is fourth-highest rank. Despite name, these are elite wrestlers just below the san'yaku champion ranks." },
+    { jp: "前頭の活躍", read: "まえがしらのかつやく", trans: "The maegashira's performance", freq: 335,
+      explain: "前頭 (maegashira) are rank-and-file wrestlers in top division, numbered 1-16. 活躍 (katsuyaku) means active performance. Lower maegashira can upset higher ranks for kinboshi." },
+    { jp: "土俵の外に出る", read: "どひょうのそとにでる", trans: "Going outside the ring", freq: 340,
+      explain: "土俵 (dohyou) is the sacred ring where matches occur. Made of clay, 4.55m diameter, raised platform. Any body part touching outside the ring loses the match." },
+    { jp: "土俵入りは伝統的だ", read: "どひょういりはでんとうてきだ", trans: "The ring entering ceremony is traditional", freq: 350,
+      explain: "土俵入り (dohyou-iri) is the ring entering ceremony performed by top wrestlers. Shows sumo's deep connection to Shinto religion and Japanese cultural traditions." }
   ];
   
   for (let i = 0; i < count; i++) {
@@ -311,13 +294,13 @@ function generateSumoPosts(count) {
       japanese: example.jp,
       reading: example.read,
       translation: example.trans,
-      explanation: example.explain || `Sumo vocabulary essential for sumo anime/content. ${example.jp.split('の')[0] || example.jp.split('は')[0] || example.jp.split('を')[0]} is core sumo terminology used in commentary.`,
+      explanation: example.explain || `Sumo vocabulary essential for sumo anime/content. Core terminology used in commentary and analysis.`,
       difficulty: example.freq <= 50 ? "intermediate" : "advanced",
       tags: ["sumo", "sports", "traditional", "anime"],
       audioFirst: Math.random() > 0.5,
       exerciseType: Math.random() > 0.5 ? "recognition" : "phonetic",
       frequency_rank: example.freq,
-      media_frequency: "high", // Sumo content is media-specific
+      media_frequency: "high",
       priority: example.freq <= 30 ? 1 : 2,
       sumo_category: "technique"
     });
