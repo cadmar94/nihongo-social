@@ -87,9 +87,6 @@ function generate120Posts() {
     ...generateSumoPosts(20)
   ];
   
-  // Sort by frequency rank to prioritize most useful words
-  allPosts.sort((a, b) => a.frequency_rank - b.frequency_rank);
-  
   return allPosts;
 }
 
