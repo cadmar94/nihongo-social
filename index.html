@@ -414,15 +414,6 @@ function getNextPost() {
     
     return selectedPost;
 }
-    
-    // Remove selected post from remaining posts
-    const index = remainingPosts.indexOf(selectedPost);
-    if (index > -1) {
-        remainingPosts.splice(index, 1);
-    }
-    
-    return selectedPost;
-}
 
         // Shuffle the posts for randomized order
         function shuffleArray(array) {
