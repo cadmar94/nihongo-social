@@ -367,7 +367,61 @@ function getNextPost() {
         shuffleArray(remainingPosts);
         console.log('All posts shown, reshuffling for new cycle');
     }
-    return remainingPosts.pop(); // Remove and return the last post
+
+    // Get user's learning data
+    const knownPosts = JSON.parse(localStorage.getItem('knownPosts') || '[]');
+    const reviewPosts = JSON.parse(localStorage.getItem('reviewPosts') || '{}');
+    
+    // Separate posts into categories
+    const reviewQueue = [];
+    const newPosts = [];
+    const knownQueue = [];
+    
+    for (const post of remainingPosts) {
+        const postId = post._id;
+        if (reviewPosts[postId]) {
+            reviewQueue.push(post);
+        } else if (knownPosts.includes(postId)) {
+            knownQueue.push(post);
+        } else {
+            newPosts.push(post);
+        }
+    }
+    
+    // Spaced repetition algorithm: 70% review, 20% new, 10% known
+    const random = Math.random();
+    let selectedPost;
+    
+    if (random < 0.7 && reviewQueue.length > 0) {
+        // Prioritize review posts
+        selectedPost = reviewQueue[Math.floor(Math.random() * reviewQueue.length)];
+    } else if (random < 0.9 && newPosts.length > 0) {
+        // Show new posts
+        selectedPost = newPosts[Math.floor(Math.random() * newPosts.length)];
+    } else if (knownQueue.length > 0) {
+        // Occasionally show known posts for reinforcement
+        selectedPost = knownQueue[Math.floor(Math.random() * knownQueue.length)];
+    } else {
+        // Fallback: any remaining post
+        selectedPost = remainingPosts[Math.floor(Math.random() * remainingPosts.length)];
+    }
+    
+    // Remove selected post from remaining posts
+    const index = remainingPosts.indexOf(selectedPost);
+    if (index > -1) {
+        remainingPosts.splice(index, 1);
+    }
+    
+    return selectedPost;
+}
+    
+    // Remove selected post from remaining posts
+    const index = remainingPosts.indexOf(selectedPost);
+    if (index > -1) {
+        remainingPosts.splice(index, 1);
+    }
+    
+    return selectedPost;
 }
 
         // Shuffle the posts for randomized order
@@ -662,25 +716,45 @@ preloadVoices(); // Try immediately
         }
 
         function markAsKnown(button) {
-            const post = button.closest('.post');
-            post.style.opacity = '0.7';
-            post.style.border = '2px solid #48dbfb';
-            updateStats('known');
-            
-            setTimeout(() => {
-                loadNextPost();
-            }, 1000);
-        }
+    const post = button.closest('.post');
+    const postId = post.dataset.postId;
+    
+    // Store as known
+    let knownPosts = JSON.parse(localStorage.getItem('knownPosts') || '[]');
+    if (!knownPosts.includes(postId)) {
+        knownPosts.push(postId);
+        localStorage.setItem('knownPosts', JSON.stringify(knownPosts));
+    }
+    
+    // Visual feedback
+    post.style.opacity = '0.7';
+    post.style.border = '2px solid #48dbfb';
+    updateStats('known');
+    
+    setTimeout(() => {
+        loadNextPost();
+    }, 1000);
+}
 
         function markAsDifficult(button) {
-            const post = button.closest('.post');
-            post.style.border = '2px solid #ff6b6b';
-            // In a real app, this would add to a review queue
-            
-            setTimeout(() => {
-                loadNextPost();
-            }, 1000);
-        }
+    const post = button.closest('.post');
+    const postId = post.dataset.postId;
+    
+    // Store for review with timestamp
+    let reviewPosts = JSON.parse(localStorage.getItem('reviewPosts') || '{}');
+    reviewPosts[postId] = {
+        timestamp: Date.now(),
+        reviewCount: (reviewPosts[postId]?.reviewCount || 0) + 1
+    };
+    localStorage.setItem('reviewPosts', JSON.stringify(reviewPosts));
+    
+    // Visual feedback
+    post.style.border = '2px solid #ff6b6b';
+    
+    setTimeout(() => {
+        loadNextPost();
+    }, 1000);
+}
 
         function loadNextPost() {
     const feed = document.getElementById('feed');
