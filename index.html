@@ -291,6 +291,59 @@
                 width: 100%;
             }
         }
+        .category-progress {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.category-progress h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.category-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-name {
+    font-weight: bold;
+    color: #555;
+    font-size: 14px;
+}
+
+.category-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.category-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.category-numbers {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -331,6 +384,39 @@
     </div>
 </div>
 
+        <div class="category-progress">
+    <h3>Category Progress</h3>
+    <div class="category-grid">
+        <div class="category-stat">
+            <div class="category-name">Daily Life</div>
+            <div class="category-bar">
+                <div class="category-fill" id="dailyLifeFill"></div>
+            </div>
+            <div class="category-numbers" id="dailyLifeNumbers">0/50</div>
+        </div>
+        <div class="category-stat">
+            <div class="category-name">Food</div>
+            <div class="category-bar">
+                <div class="category-fill" id="foodFill"></div>
+            </div>
+            <div class="category-numbers" id="foodNumbers">0/30</div>
+        </div>
+        <div class="category-stat">
+            <div class="category-name">Casual</div>
+            <div class="category-bar">
+                <div class="category-fill" id="casualFill"></div>
+            </div>
+            <div class="category-numbers" id="casualNumbers">0/20</div>
+        </div>
+        <div class="category-stat">
+            <div class="category-name">Sumo</div>
+            <div class="category-bar">
+                <div class="category-fill" id="sumoFill"></div>
+            </div>
+            <div class="category-numbers" id="sumoNumbers">0/20</div>
+        </div>
+    </div>
+</div>
     <script>
         // Expanded content library - removed broken quizzes for now
     
@@ -661,18 +747,86 @@ preloadVoices(); // Try immediately
     const knownPosts = JSON.parse(localStorage.getItem('knownPosts') || '[]');
     const reviewPosts = JSON.parse(localStorage.getItem('reviewPosts') || '{}');
     
-    // Update counters
+    // Update main counters
     document.getElementById('knownCount').textContent = knownPosts.length;
     document.getElementById('reviewCount').textContent = Object.keys(reviewPosts).length;
     
     // Calculate progress percentage
-    const totalPosts = 120; // Total posts in database
+    const totalPosts = 120;
     const masteredCount = knownPosts.length;
     const progressPercent = Math.round((masteredCount / totalPosts) * 100);
     document.getElementById('progressPercent').textContent = progressPercent + '%';
     
-    // Update streak (for now, keep existing logic)
+    // Calculate category-specific progress
+    updateCategoryProgress(knownPosts);
+    
+    // Update streak
     updateStreak(action);
+}
+
+function updateCategoryProgress(knownPosts) {
+    // Category totals: Daily Life (50), Food (30), Casual (20), Sumo (20)
+    const categoryTotals = {
+        'daily-life': 50,
+        'food': 30,
+        'casual': 20,
+        'sumo': 20
+    };
+    
+    const categoryCounts = {
+        'daily-life': 0,
+        'food': 0,
+        'casual': 0,
+        'sumo': 0
+    };
+    
+    // Count known posts by category
+    knownPosts.forEach(postId => {
+        // Find the post in allLearningPosts to get its category
+        const post = allLearningPosts.find(p => p._id === postId);
+        if (post && categoryCounts.hasOwnProperty(post.category)) {
+            categoryCounts[post.category]++;
+        }
+    });
+    
+    // Update display for each category
+    Object.keys(categoryTotals).forEach(category => {
+        const known = categoryCounts[category];
+        const total = categoryTotals[category];
+        const percentage = Math.round((known / total) * 100);
+        
+        // Update numbers
+        const numbersElement = document.getElementById(getCategoryNumbersId(category));
+        if (numbersElement) {
+            numbersElement.textContent = `${known}/${total}`;
+        }
+        
+        // Update progress bar
+        const fillElement = document.getElementById(getCategoryFillId(category));
+        if (fillElement) {
+            fillElement.style.width = percentage + '%';
+        }
+    });
+}
+
+function getCategoryNumbersId(category) {
+    const mapping = {
+        'daily-life': 'dailyLifeNumbers',
+        'food': 'foodNumbers',
+        'casual': 'casualNumbers',
+        'sumo': 'sumoNumbers'
+    };
+    return mapping[category];
+}
+
+function getCategoryFillId(category) {
+    const mapping = {
+        'daily-life': 'dailyLifeFill',
+        'food': 'foodFill',
+        'casual': 'casualFill',
+        'sumo': 'sumoFill'
+    };
+    return mapping[category];
 }
 
 function updateStreak(action) {
