@@ -313,20 +313,23 @@
         </div>
 
         <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="knownCount">0</div>
-                <div class="stat-label">Known</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="practicedCount">0</div>
-                <div class="stat-label">Practiced</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="streakCount">1</div>
-                <div class="stat-label">Day Streak</div>
-            </div>
-        </div>
+    <div class="stat">
+        <div class="stat-number" id="knownCount">0</div>
+        <div class="stat-label">Mastered</div>
     </div>
+    <div class="stat">
+        <div class="stat-number" id="reviewCount">0</div>
+        <div class="stat-label">Review Queue</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="progressPercent">0%</div>
+        <div class="stat-label">Progress</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="streakCount">1</div>
+        <div class="stat-label">Day Streak</div>
+    </div>
+</div>
 
     <script>
         // Expanded content library - removed broken quizzes for now
@@ -655,14 +658,37 @@ preloadVoices(); // Try immediately
         }
 
         function updateStats(action) {
-            if (action === 'known') {
-                knownCount++;
-                document.getElementById('knownCount').textContent = knownCount;
-            } else if (action === 'practiced') {
-                practicedCount++;
-                document.getElementById('practicedCount').textContent = practicedCount;
-            }
-        }
+    const knownPosts = JSON.parse(localStorage.getItem('knownPosts') || '[]');
+    const reviewPosts = JSON.parse(localStorage.getItem('reviewPosts') || '{}');
+    
+    // Update counters
+    document.getElementById('knownCount').textContent = knownPosts.length;
+    document.getElementById('reviewCount').textContent = Object.keys(reviewPosts).length;
+    
+    // Calculate progress percentage
+    const totalPosts = 120; // Total posts in database
+    const masteredCount = knownPosts.length;
+    const progressPercent = Math.round((masteredCount / totalPosts) * 100);
+    document.getElementById('progressPercent').textContent = progressPercent + '%';
+    
+    // Update streak (for now, keep existing logic)
+    updateStreak(action);
+}
+
+function updateStreak(action) {
+    const today = new Date().toDateString();
+    const lastActive = localStorage.getItem('lastActiveDate');
+    let streak = parseInt(localStorage.getItem('learningStreak') || '0');
+    
+    if (lastActive !== today && action === 'known') {
+        // New day, increment streak
+        streak += 1;
+        localStorage.setItem('learningStreak', streak.toString());
+        localStorage.setItem('lastActiveDate', today);
+    }
+    
+    document.getElementById('streakCount').textContent = streak;
+}
 
         function createPost(postData) {
             const postId = postData._id || postData.id || Math.random().toString(36).substr(2, 9);
@@ -778,6 +804,7 @@ preloadVoices(); // Try immediately
 async function initApp() {
     await fetchPosts();  // Add this line
     loadNextPost();
+    updateStats('init'); // Initialize analytics display
     
     // Load next post every 30 seconds for demo
     setInterval(() => {
