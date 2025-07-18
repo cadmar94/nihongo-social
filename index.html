@@ -38,7 +38,33 @@
             font-size: 24px;
             margin-bottom: 8px;
         }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
+        .filter-btn {
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #e0e0e0;
+            border-color: #ccc;
+        }
+
+        .filter-btn.active {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
         .header p {
             opacity: 0.9;
             font-size: 14px;
@@ -273,7 +299,13 @@
   <span style="font-size: 0.7em;">(Nihongo Feed)</span>
 </h1>
         </div>
-
+<div class="filter-container" style="text-align: center; margin: 20px 0; padding: 0 20px;">
+            <button class="filter-btn active" onclick="filterPosts('all')">All</button>
+            <button class="filter-btn" onclick="filterPosts('daily-life')">Daily Life</button>
+            <button class="filter-btn" onclick="filterPosts('food')">Food</button>
+            <button class="filter-btn" onclick="filterPosts('casual')">Casual</button>
+            <button class="filter-btn" onclick="filterPosts('sumo')">Sumo</button>
+        </div>
         <div class="feed" id="feed">
             <!-- Posts will be dynamically generated here -->
         </div>
@@ -345,7 +377,35 @@ function getNextPost() {
             }
             return shuffled;
         }
+        // Filter posts by category
+        let currentFilter = 'all';
 
+        function filterPosts(category) {
+            currentFilter = category;
+            
+            // Update button active state
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[onclick="filterPosts('${category}')"]`).classList.add('active');
+            
+            // Clear current feed
+            document.getElementById('feed').innerHTML = '';
+            
+            // Reset post arrays for the new filter
+            if (category === 'all') {
+                remainingPosts = [...allLearningPosts];
+            } else {
+                remainingPosts = allLearningPosts.filter(post => {
+                    return post.tags && post.tags.includes(category);
+                });
+            }
+            
+            shuffleArray(remainingPosts);
+            
+            // Load first post of filtered category
+            loadNextPost();
+        }
         // Initialize with shuffled posts
         const learningPosts = shuffleArray(allLearningPosts);
 
