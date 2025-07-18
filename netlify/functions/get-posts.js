@@ -18,7 +18,9 @@ exports.handler = async (event, context) => {
     const db = client.db('nihongo-social');
     const collection = db.collection('posts');
     
-    const posts = await collection.find({}).limit(20).toArray();
+    const posts = await collection.aggregate([
+  { $sample: { size: 120 } }
+]).toArray();
     
     await client.close();
     
