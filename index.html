@@ -619,32 +619,31 @@ preloadVoices(); // Try immediately
         }
 
         function loadNextPost() {
-            const feed = document.getElementById('feed');
-            
-            if (currentPostIndex < allLearningPosts.length) {
-                const newPost = createPost(allLearningPosts[currentPostIndex]);
-                feed.appendChild(newPost);
-                currentPostIndex++;
-                
-                // Keep only last 3 posts visible to avoid clutter
-                const posts = feed.querySelectorAll('.post');
-                if (posts.length > 3) {
-                    posts[0].style.transition = 'all 0.3s ease';
-                    posts[0].style.opacity = '0';
-                    posts[0].style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        if (posts[0].parentNode) {
-                            posts[0].parentNode.removeChild(posts[0]);
-                        }
-                    }, 300);
+    const feed = document.getElementById('feed');
+    
+    const nextPost = getNextPost();
+    if (nextPost) {
+        const newPost = createPost(nextPost);
+        feed.appendChild(newPost);
+        
+        // Keep only last 3 posts visible to avoid clutter
+        const posts = feed.querySelectorAll('.post');
+        if (posts.length > 3) {
+            posts[0].style.transition = 'all 0.3s ease';
+            posts[0].style.opacity = '0';
+            posts[0].style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (posts[0].parentNode) {
+                    posts[0].parentNode.removeChild(posts[0]);
                 }
-            } else {
-                // Reset for demo purposes
-                currentPostIndex = 0;
-                feed.innerHTML = '';
-                loadNextPost();
-            }
+            }, 300);
         }
+    } else {
+        // Reset for demo purposes (shouldn't happen with our new system)
+        console.log('No more posts available');
+        loadNextPost();
+    }
+}
 
         // Initialize the app
 async function initApp() {
