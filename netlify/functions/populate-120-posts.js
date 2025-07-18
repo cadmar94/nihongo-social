@@ -134,16 +134,26 @@ function generate120Posts() {
 function generateDailyLifePosts(count) {
   const posts = [];
   const dailyLifeExamples = [
-    { jp: "今日はコーヒーを飲む", read: "きょうはコーヒーをのむ", trans: "Today I'm drinking coffee", freq: 25 },
-    { jp: "家で友達と会う", read: "いえでともだちとあう", trans: "Meeting friends at home", freq: 45 },
-    { jp: "明日は仕事がある", read: "あしたはしごとがある", trans: "Tomorrow I have work", freq: 40 },
-    { jp: "時間がない", read: "じかんがない", trans: "There's no time", freq: 30 },
-    { jp: "学校に行く", read: "がっこうにいく", trans: "Going to school", freq: 50 },
-    { jp: "昨日は暑かった", read: "きのうはあつかった", trans: "Yesterday was hot", freq: 35 },
-    { jp: "お金を使う", read: "おかねをつかう", trans: "Using money", freq: 92 },
-    { jp: "天気がいい", read: "てんきがいい", trans: "The weather is good", freq: 135 },
-    { jp: "雨が降る", read: "あめがふる", trans: "It's raining", freq: 140 },
-    { jp: "寒い日だ", read: "さむいひだ", trans: "It's a cold day", freq: 150 }
+    { jp: "今日はコーヒーを飲む", read: "きょうはコーヒーをのむ", trans: "Today I'm drinking coffee", freq: 25, 
+      explain: "今日 (kyou) is one of the most essential time words in Japanese. Unlike textbook phrases about libraries, this appears constantly in real conversation and anime." },
+    { jp: "家で友達と会う", read: "いえでともだちとあう", trans: "Meeting friends at home", freq: 45,
+      explain: "家 (ie) means home/house and 友達 (tomodachi) is friend - both high-frequency words. The で particle shows location where the action happens." },
+    { jp: "明日は仕事がある", read: "あしたはしごとがある", trans: "Tomorrow I have work", freq: 40,
+      explain: "明日 (ashita) tomorrow and 仕事 (shigoto) work are essential daily vocabulary. がある means 'to have/exist' for inanimate things like work." },
+    { jp: "時間がない", read: "じかんがない", trans: "There's no time", freq: 30,
+      explain: "時間 (jikan) time is crucial vocabulary. がない is the negative form of がある - very common pattern you'll hear constantly in daily life." },
+    { jp: "学校に行く", read: "がっこうにいく", trans: "Going to school", freq: 50,
+      explain: "学校 (gakkou) school and 行く (iku) to go are basic but essential. The に particle shows direction/destination - different from で (location of action)." },
+    { jp: "昨日は暑かった", read: "きのうはあつかった", trans: "Yesterday was hot", freq: 35,
+      explain: "昨日 (kinou) yesterday and 暑い (atsui) hot. The かった ending makes past tense for i-adjectives - key grammar pattern." },
+    { jp: "お金を使う", read: "おかねをつかう", trans: "Using money", freq: 92,
+      explain: "お金 (okane) money and 使う (tsukau) to use. The を particle marks what you're using - essential particle for object of action." },
+    { jp: "天気がいい", read: "てんきがいい", trans: "The weather is good", freq: 135,
+      explain: "天気 (tenki) weather is practical daily vocabulary. いい (good) is more casual than よい - you'll hear いい much more in conversation." },
+    { jp: "雨が降る", read: "あめがふる", trans: "It's raining", freq: 140,
+      explain: "雨 (ame) rain and 降る (furu) to fall. This is the natural way to say 'it's raining' in Japanese - rain falls rather than 'it rains'." },
+    { jp: "寒い日だ", read: "さむいひだ", trans: "It's a cold day", freq: 150,
+      explain: "寒い (samui) cold and 日 (hi) day. Simple but useful weather expression. だ is the casual form of です." }
   ];
   
   for (let i = 0; i < count; i++) {
@@ -155,7 +165,7 @@ function generateDailyLifePosts(count) {
       japanese: example.jp,
       reading: example.read,
       translation: example.trans + variation,
-      explanation: `High-frequency daily vocabulary. Core words from subtitle analysis that appear in real conversations vs textbook phrases.`,
+      explanation: example.explain || `High-frequency daily vocabulary. Core words from subtitle analysis that appear in real conversations vs textbook phrases.`,
       difficulty: example.freq <= 50 ? "beginner" : "intermediate",
       tags: ["daily-life", "high-frequency", "practical"],
       audioFirst: Math.random() > 0.7,
@@ -173,16 +183,26 @@ function generateDailyLifePosts(count) {
 function generateFoodPosts(count) {
   const posts = [];
   const foodExamples = [
-    { jp: "この料理は美味しい", read: "このりょうりはおいしい", trans: "This food is delicious", freq: 75 },
-    { jp: "レストランで食べる", read: "レストランでたべる", trans: "Eating at a restaurant", freq: 85 },
-    { jp: "コーヒーを買う", read: "コーヒーをかう", trans: "Buying coffee", freq: 90 },
-    { jp: "お茶を飲む", read: "おちゃをのむ", trans: "Drinking tea", freq: 95 },
-    { jp: "ご飯を作る", read: "ごはんをつくる", trans: "Making rice/meal", freq: 100 },
-    { jp: "パンが好き", read: "パンがすき", trans: "I like bread", freq: 105 },
-    { jp: "肉を食べる", read: "にくをたべる", trans: "Eating meat", freq: 110 },
-    { jp: "店で買い物", read: "みせでかいもの", trans: "Shopping at the store", freq: 87 },
-    { jp: "安いレストラン", read: "やすいレストラン", trans: "Cheap restaurant", freq: 97 },
-    { jp: "高い料理", read: "たかいりょうり", trans: "Expensive food", freq: 102 }
+    { jp: "この料理は美味しい", read: "このりょうりはおいしい", trans: "This food is delicious", freq: 75,
+      explain: "料理 (ryouri) cooking/cuisine and 美味しい (oishii) delicious are essential for food conversations. You'll hear these constantly in food anime and restaurant scenes." },
+    { jp: "レストランで食べる", read: "レストランでたべる", trans: "Eating at a restaurant", freq: 85,
+      explain: "レストラン (resutoran) restaurant and 食べる (taberu) to eat. The で particle shows where the eating happens - key pattern for location of actions." },
+    { jp: "コーヒーを買う", read: "コーヒーをかう", trans: "Buying coffee", freq: 90,
+      explain: "コーヒー (koohii) coffee appears frequently in daily conversation. 買う (kau) to buy with を particle marking what you're purchasing." },
+    { jp: "お茶を飲む", read: "おちゃをのむ", trans: "Drinking tea", freq: 95,
+      explain: "お茶 (ocha) tea is fundamental Japanese beverage vocabulary. 飲む (nomu) to drink is one of the most essential verbs for food and beverages." },
+    { jp: "ご飯を作る", read: "ごはんをつくる", trans: "Making rice/meal", freq: 100,
+      explain: "ご飯 (gohan) means both rice and meal - culturally important word. 作る (tsukuru) to make is key cooking vocabulary you'll need for kitchen scenes." },
+    { jp: "パンが好き", read: "パンがすき", trans: "I like bread", freq: 105,
+      explain: "パン (pan) bread from Portuguese. 好き (suki) to like uses が particle, not を - important grammar distinction for preferences." },
+    { jp: "肉を食べる", read: "にくをたべる", trans: "Eating meat", freq: 110,
+      explain: "肉 (niku) meat is basic food vocabulary. Simple pattern: [food]を食べる is how you say eating specific foods in Japanese." },
+    { jp: "店で買い物", read: "みせでかいもの", trans: "Shopping at the store", freq: 87,
+      explain: "店 (mise) store and 買い物 (kaimono) shopping. で particle for location again - pattern you'll use for any activity at a place." },
+    { jp: "安いレストラン", read: "やすいレストラン", trans: "Cheap restaurant", freq: 97,
+      explain: "安い (yasui) cheap is essential for budget discussions. Adjectives come before nouns in Japanese, unlike English order." },
+    { jp: "高い料理", read: "たかいりょうり", trans: "Expensive food", freq: 102,
+      explain: "高い (takai) expensive/high. In restaurant contexts, definitely means expensive. Same adjective-noun pattern as 安いレストラン." }
   ];
   
   for (let i = 0; i < count; i++) {
@@ -194,7 +214,7 @@ function generateFoodPosts(count) {
       japanese: example.jp,
       reading: example.read,
       translation: example.trans + variation,
-      explanation: `Food vocabulary from subtitle analysis. Essential for dining conversations and food anime/drama.`,
+      explanation: example.explain || `Food vocabulary from subtitle analysis. Essential for dining conversations and food anime/drama.`,
       difficulty: example.freq <= 100 ? "beginner" : "intermediate", 
       tags: ["food", "dining", "practical"],
       audioFirst: Math.random() > 0.6,
@@ -212,16 +232,26 @@ function generateFoodPosts(count) {
 function generateCasualPosts(count) {
   const posts = [];
   const casualExamples = [
-    { jp: "やばい美味しい！", read: "やばいおいしい！", trans: "So delicious!", freq: 47 },
-    { jp: "すごいね！", read: "すごいね！", trans: "That's amazing!", freq: 52 },
-    { jp: "大丈夫？", read: "だいじょうぶ？", trans: "Are you okay?", freq: 57 },
-    { jp: "ちょっと待って", read: "ちょっとまって", trans: "Wait a little", freq: 62 },
-    { jp: "本当にすごい", read: "ほんとうにすごい", trans: "Really amazing", freq: 67 },
-    { jp: "多分大丈夫", read: "たぶんだいじょうぶ", trans: "Probably okay", freq: 72 },
-    { jp: "全然わからない", read: "ぜんぜんわからない", trans: "Don't understand at all", freq: 77 },
-    { jp: "めちゃくちゃ面白い", read: "めちゃくちゃおもしろい", trans: "Extremely interesting", freq: 120 },
-    { jp: "やばいって！", read: "やばいって！", trans: "No way!", freq: 47 },
-    { jp: "すごく好き", read: "すごくすき", trans: "Really like it", freq: 52 }
+    { jp: "やばい美味しい！", read: "やばいおいしい！", trans: "So delicious!", freq: 47,
+      explain: "やばい (yabai) ranks #47 in anime subtitles but is barely taught in textbooks. Originally meant 'dangerous' but now means 'awesome' or 'terrible' depending on context. Essential for understanding casual Japanese." },
+    { jp: "すごいね！", read: "すごいね！", trans: "That's amazing!", freq: 52,
+      explain: "すごい (sugoi) is one of the most useful casual expressions. The ね particle adds emphasis and seeks agreement - like 'right?' in English. You'll hear this constantly in anime." },
+    { jp: "大丈夫？", read: "だいじょうぶ？", trans: "Are you okay?", freq: 57,
+      explain: "大丈夫 (daijoubu) is incredibly versatile - means OK, alright, fine, or no problem. Rising intonation (？) makes it a question. Essential for daily conversation." },
+    { jp: "ちょっと待って", read: "ちょっとまって", trans: "Wait a little", freq: 62,
+      explain: "ちょっと (chotto) means 'a little' but also 'wait' or 'excuse me'. て form (待って) is casual imperative. Much more natural than textbook 待ちなさい." },
+    { jp: "本当にすごい", read: "ほんとうにすごい", trans: "Really amazing", freq: 67,
+      explain: "本当に (hontou ni) really/truly for emphasis. Often shortened to ほんと (honto) in casual speech. Combined with すごい for strong positive reaction." },
+    { jp: "多分大丈夫", read: "たぶんだいじょうぶ", trans: "Probably okay", freq: 72,
+      explain: "多分 (tabun) probably/maybe expresses uncertainty politely. Combined with 大丈夫 for reassurance. Very common pattern in everyday conversation." },
+    { jp: "全然わからない", read: "ぜんぜんわからない", trans: "Don't understand at all", freq: 77,
+      explain: "全然 (zenzen) not at all, completely. Originally only used with negatives but now used with positives too in casual speech. わからない is polite form of わからん." },
+    { jp: "めちゃくちゃ面白い", read: "めちゃくちゃおもしろい", trans: "Extremely interesting", freq: 120,
+      explain: "めちゃくちゃ (mechakucha) extremely/ridiculously. Much more casual than とても or 非常に. Essential intensifier for casual conversation and anime." },
+    { jp: "やばいって！", read: "やばいって！", trans: "No way!", freq: 47,
+      explain: "って is casual form of と言う (to say). やばいって literally means 'I'm telling you it's crazy!' Express disbelief or emphasis. Pure casual speech." },
+    { jp: "すごく好き", read: "すごくすき", trans: "Really like it", freq: 52,
+      explain: "すごく is adverb form of すごい, meaning 'very' or 'really'. More casual than とても. 好き uses が particle (すごく好きだ), not を." }
   ];
   
   for (let i = 0; i < count; i++) {
@@ -233,7 +263,7 @@ function generateCasualPosts(count) {
       japanese: example.jp,
       reading: example.read,
       translation: example.trans + variation,
-      explanation: `Casual anime/media expressions (rank #${example.freq}). Essential for understanding real Japanese but rarely taught in textbooks.`,
+      explanation: example.explain || `Casual anime/media expressions (rank #${example.freq}). Essential for understanding real Japanese but rarely taught in textbooks.`,
       difficulty: "intermediate",
       tags: ["casual", "anime", "slang", "high-frequency"],
       audioFirst: true, // Audio-first for casual speech patterns
@@ -281,7 +311,7 @@ function generateSumoPosts(count) {
       japanese: example.jp,
       reading: example.read,
       translation: example.trans,
-      explanation: `Sumo vocabulary essential for sumo anime/content. ${example.jp.split('の')[0] || example.jp.split('は')[0] || example.jp.split('を')[0]} is core sumo terminology used in commentary.`,
+      explanation: example.explain || `Sumo vocabulary essential for sumo anime/content. ${example.jp.split('の')[0] || example.jp.split('は')[0] || example.jp.split('を')[0]} is core sumo terminology used in commentary.`,
       difficulty: example.freq <= 50 ? "intermediate" : "advanced",
       tags: ["sumo", "sports", "traditional", "anime"],
       audioFirst: Math.random() > 0.5,
