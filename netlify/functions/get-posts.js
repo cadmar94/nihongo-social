@@ -18,9 +18,10 @@ exports.handler = async (event, context) => {
     const db = client.db('nihongo-social');
     const collection = db.collection('posts');
     
-    const posts = await collection.aggregate([
-  { $sample: { size: 120 } }
-]).toArray();
+    const allPosts = await collection.find({}).toArray();
+// Shuffle the array
+const shuffled = allPosts.sort(() => Math.random() - 0.5);
+const posts = shuffled;
     
     await client.close();
     
