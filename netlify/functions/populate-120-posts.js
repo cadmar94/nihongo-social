@@ -251,26 +251,26 @@ function generateCasualPosts(count) {
 function generateSumoPosts(count) {
   const posts = [];
   const sumoExamples = [
-    { jp: "今日の相撲は面白い", read: "きょうのすもうはおもしろい", trans: "Today's sumo is interesting", freq: 5 },
-    { jp: "横綱の寄り切りが美しい", read: "よこづなのよりきりがうつくしい", trans: "The yokozuna's yorikiri is beautiful", freq: 20 },
-    { jp: "この力士はすごい", read: "このりきしはすごい", trans: "This wrestler is amazing", freq: 8 },
-    { jp: "場所の千秋楽を見る", read: "ばしょのせんしゅうらくをみる", trans: "Watching the final day of the tournament", freq: 15 },
-    { jp: "土俵入りは伝統的だ", read: "どひょういりはでんとうてきだ", trans: "The ring entering ceremony is traditional", freq: 90 },
-    { jp: "金星を取った！", read: "きんぼしをとった！", trans: "Got a gold star!", freq: 85 },
-    { jp: "押し出しで勝利", read: "おしだしでしょうり", trans: "Victory by push out", freq: 55 },
-    { jp: "上手投げは難しい", read: "うわてなげはむずかしい", trans: "Overarm throw is difficult", freq: 75 },
-    { jp: "本場所が始まった", read: "ほんばしょがはじまった", trans: "The grand tournament has begun", freq: 60 },
-    { jp: "勝ち越しおめでとう", read: "かちこしおめでとう", trans: "Congratulations on your winning record", freq: 67 },
-    { jp: "立合いが重要だ", read: "たちあいがじゅうようだ", trans: "The initial charge is important", freq: 77 },
-    { jp: "廻しを掴む", read: "まわしをつかむ", trans: "Grabbing the mawashi", freq: 22 },
-    { jp: "大関の相撲", read: "おおぜきのすもう", trans: "The ozeki's sumo", freq: 25 },
-    { jp: "叩き込みで決まった", read: "はたきこみできまった", trans: "Decided by slap down", freq: 65 },
-    { jp: "土俵の外に出る", read: "どひょうのそとにでる", trans: "Going outside the ring", freq: 12 },
-    { jp: "優勝争いが激しい", read: "ゆうしょうあらそいがはげしい", trans: "The championship race is intense", freq: 42 },
-    { jp: "関脇の頑張り", read: "せきわけのがんばり", trans: "The sekiwake's effort", freq: 30 },
-    { jp: "小結も強い", read: "こむすびもつよい", trans: "The komusubi is also strong", freq: 35 },
-    { jp: "前頭の活躍", read: "まえがしらのかつやく", trans: "The maegashira's performance", freq: 40 },
-    { jp: "勝負の行方", read: "しょうぶのゆくえ", trans: "The outcome of the match", freq: 18 }
+    { jp: "今日の相撲は面白い", read: "きょうのすもうはおもしろい", trans: "Today's sumo is interesting", freq: 200 }, // 相撲 is sumo-specific
+    { jp: "横綱の寄り切りが美しい", read: "よこづなのよりきりがうつくしい", trans: "The yokozuna's yorikiri is beautiful", freq: 300 }, // 横綱 + 寄り切り very sumo-specific
+    { jp: "この力士はすごい", read: "このりきしはすごい", trans: "This wrestler is amazing", freq: 52 }, // すごい is high-frequency casual
+    { jp: "場所の千秋楽を見る", read: "ばしょのせんしゅうらくをみる", trans: "Watching the final day of the tournament", freq: 19 }, // 見る is very high frequency
+    { jp: "土俵入りは伝統的だ", read: "どひょういりはでんとうてきだ", trans: "The ring entering ceremony is traditional", freq: 350 }, // 土俵入り very sumo-specific
+    { jp: "金星を取った！", read: "きんぼしをとった！", trans: "Got a gold star!", freq: 280 }, // 金星 is sumo-specific
+    { jp: "押し出しで勝利", read: "おしだしでしょうり", trans: "Victory by push out", freq: 250 }, // 押し出し is sumo technique
+    { jp: "上手投げは難しい", read: "うわてなげはむずかしい", trans: "Overarm throw is difficult", freq: 270 }, // 上手投げ is sumo technique
+    { jp: "本場所が始まった", read: "ほんばしょがはじまった", trans: "The grand tournament has begun", freq: 240 }, // 本場所 is sumo-specific
+    { jp: "勝ち越しおめでとう", read: "かちこしおめでとう", trans: "Congratulations on your winning record", freq: 230 }, // 勝ち越し is sumo term
+    { jp: "立合いが重要だ", read: "たちあいがじゅうようだ", trans: "The initial charge is important", freq: 260 }, // 立合い is sumo-specific
+    { jp: "廻しを掴む", read: "まわしをつかむ", trans: "Grabbing the mawashi", freq: 290 }, // 廻し is sumo equipment
+    { jp: "大関の相撲", read: "おおぜきのすもう", trans: "The ozeki's sumo", freq: 310 }, // 大関 is sumo rank
+    { jp: "叩き込みで決まった", read: "はたきこみできまった", trans: "Decided by slap down", freq: 220 }, // 叩き込み is sumo technique
+    { jp: "土俵の外に出る", read: "どひょうのそとにでる", trans: "Going outside the ring", freq: 340 }, // 土俵 is sumo-specific
+    { jp: "優勝争いが激しい", read: "ゆうしょうあらそいがはげしい", trans: "The championship race is intense", freq: 42 }, // 優勝 appears in general sports
+    { jp: "関脇の頑張り", read: "せきわけのがんばり", trans: "The sekiwake's effort", freq: 320 }, // 関脇 is sumo rank
+    { jp: "小結も強い", read: "こむすびもつよい", trans: "The komusubi is also strong", freq: 330 }, // 小結 is sumo rank
+    { jp: "前頭の活躍", read: "まえがしらのかつやく", trans: "The maegashira's performance", freq: 335 }, // 前頭 is sumo rank
+    { jp: "勝負の行方", read: "しょうぶのゆくえ", trans: "The outcome of the match", freq: 18 } // 勝負 appears in general contexts
   ];
   
   for (let i = 0; i < count; i++) {
