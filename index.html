@@ -364,7 +364,7 @@ async function fetchPosts() {
             
             // Use the selected voice if found
             if (selectedVoice) {
-                utterance.voice = selectedVoice;
+                utterance.voice = preferredVoice || selectedVoice;
             }
             
             utterance.onerror = function(event) {
@@ -379,7 +379,31 @@ async function fetchPosts() {
         console.log('Error in speech synthesis:', error);
     }
 }
+// Preload voices to fix first-click voice bug
+let preferredVoice = null;
 
+function preloadVoices() {
+    const voices = speechSynthesis.getVoices();
+    const japaneseVoices = voices.filter(voice => voice.lang.startsWith('ja'));
+    
+    if (japaneseVoices.length > 0) {
+        const femaleVoiceNames = ['kyoko', 'haruka', 'sayaka', 'yuki', 'female'];
+        const highQualityNames = ['premium', 'enhanced', 'neural'];
+        
+        preferredVoice = japaneseVoices.find(voice =>
+            femaleVoiceNames.some(name => voice.name.toLowerCase().includes(name)) ||
+            highQualityNames.some(name => voice.name.toLowerCase().includes(name))
+        );
+        
+        if (!preferredVoice) {
+            preferredVoice = japaneseVoices[0];
+        }
+    }
+}
+
+// Load voices when available
+speechSynthesis.addEventListener('voiceschanged', preloadVoices);
+preloadVoices(); // Try immediately
         // Speech recognition for practice
         function startSpeechPractice(targetText, postElement) {
             try {
