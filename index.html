@@ -364,10 +364,18 @@ function shuffleArray(array) {
 }
 
 function getNextPost() {
+    // Initialize recently shown buffer if it doesn't exist
+    if (!window.recentlyShown) {
+        window.recentlyShown = [];
+    }
+    
+    const BUFFER_SIZE = 45; // Prevent repeats for 45 posts
+    
     if (remainingPosts.length === 0) {
         // All posts shown, reshuffle and start over
         remainingPosts = [...allLearningPosts];
         shuffleArray(remainingPosts);
+        window.recentlyShown = []; // Clear recently shown when reshuffling
         console.log('All posts shown, reshuffling for new cycle');
     }
 
@@ -390,29 +398,37 @@ function getNextPost() {
             newPosts.push(post);
         }
     }
+    // Remove recently shown posts from all categories
+    const availableReviewQueue = reviewQueue.filter(post => !window.recentlyShown.includes(post._id));
+    const availableNewPosts = newPosts.filter(post => !window.recentlyShown.includes(post._id));
+    const availableKnownQueue = knownQueue.filter(post => !window.recentlyShown.includes(post._id));
     
     // Spaced repetition algorithm: 70% review, 20% new, 10% known
     const random = Math.random();
     let selectedPost;
     
-    if (random < 0.7 && reviewQueue.length > 0) {
-        // Prioritize review posts
-        selectedPost = reviewQueue[Math.floor(Math.random() * reviewQueue.length)];
-    } else if (random < 0.9 && newPosts.length > 0) {
-        // Show new posts
-        selectedPost = newPosts[Math.floor(Math.random() * newPosts.length)];
-    } else if (knownQueue.length > 0) {
-        // Occasionally show known posts for reinforcement
-        selectedPost = knownQueue[Math.floor(Math.random() * knownQueue.length)];
-    } else {
-        // Fallback: any remaining post
-        selectedPost = remainingPosts[Math.floor(Math.random() * remainingPosts.length)];
-    }
+    if (random < 0.7 && availableReviewQueue.length > 0) {
+    selectedPost = availableReviewQueue[Math.floor(Math.random() * availableReviewQueue.length)];
+} else if (random < 0.9 && availableNewPosts.length > 0) {
+    selectedPost = availableNewPosts[Math.floor(Math.random() * availableNewPosts.length)];
+} else if (availableKnownQueue.length > 0) {
+    selectedPost = availableKnownQueue[Math.floor(Math.random() * availableKnownQueue.length)];
+}
     
     // Remove selected post from remaining posts
     const index = remainingPosts.indexOf(selectedPost);
     if (index > -1) {
         remainingPosts.splice(index, 1);
+    }
+
+    // Add selected post to recently shown buffer
+    if (selectedPost) {
+        window.recentlyShown.push(selectedPost._id);
+        
+        // Keep buffer size limited
+        if (window.recentlyShown.length > BUFFER_SIZE) {
+            window.recentlyShown.shift(); // Remove oldest entry
+        }
     }
     
     return selectedPost;
