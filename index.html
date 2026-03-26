@@ -291,6 +291,82 @@
                 width: 100%;
             }
         }
+        /* Session Goal Widget */
+.session-goal {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.goal-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.goal-target {
+    font-size: 14px;
+    color: #666;
+}
+
+.goal-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.goal-progress-bar {
+    flex: 1;
+    height: 12px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.goal-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.goal-progress-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    min-width: 50px;
+}
+
+.goal-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.goal-btn {
+    padding: 8px 16px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.goal-btn:hover {
+    background: #1976D2;
+}
     </style>
 </head>
 <body>
@@ -330,7 +406,22 @@
         <div class="stat-label">Day Streak</div>
     </div>
 </div>
-
+<!-- Session Goal Widget -->
+<div class="session-goal">
+    <div class="goal-header">
+        <span class="goal-title">Today's Goal</span>
+        <span class="goal-target" id="goalTarget">Master 5 Posts</span>
+    </div>
+    <div class="goal-progress-container">
+        <div class="goal-progress-bar">
+            <div class="goal-progress-fill" id="goalProgressFill"></div>
+        </div>
+        <div class="goal-progress-text" id="goalProgressText">0/5</div>
+    </div>
+    <div class="goal-actions">
+        <button class="goal-btn" onclick="changeGoal()">Change Goal</button>
+    </div>
+</div>
     <script>
         // Expanded content library - removed broken quizzes for now
     
@@ -690,7 +781,69 @@ preloadVoices(); // Try immediately
     // Update streak (for now, keep existing logic)
     updateStreak(action);
 }
+// Session Goal Management
+function updateSessionGoal() {
+    const today = new Date().toDateString();
+    const goalData = JSON.parse(localStorage.getItem('sessionGoal') || '{"target": 5, "date": "", "progress": 0}');
+    
+    // Reset progress if it's a new day
+    if (goalData.date !== today) {
+        goalData.date = today;
+        goalData.progress = 0;
+        localStorage.setItem('sessionGoal', JSON.stringify(goalData));
+    }
+    
+    // Count today's mastered posts
+    const knownPosts = JSON.parse(localStorage.getItem('knownPosts') || '[]');
+    const todaysMastered = goalData.progress; // We'll track this when marking posts as known
+    
+    // Update display
+    const progressPercent = Math.min((todaysMastered / goalData.target) * 100, 100);
+    document.getElementById('goalProgressFill').style.width = progressPercent + '%';
+    document.getElementById('goalProgressText').textContent = `${todaysMastered}/${goalData.target}`;
+    document.getElementById('goalTarget').textContent = `Master ${goalData.target} Posts`;
+    
+    // Celebration if goal reached
+    if (todaysMastered >= goalData.target && todaysMastered > 0) {
+        celebrateGoal();
+    }
+}
 
+function incrementGoalProgress() {
+    const goalData = JSON.parse(localStorage.getItem('sessionGoal') || '{"target": 5, "date": "", "progress": 0}');
+    const today = new Date().toDateString();
+    
+    if (goalData.date !== today) {
+        goalData.date = today;
+        goalData.progress = 0;
+    }
+    
+    goalData.progress += 1;
+    localStorage.setItem('sessionGoal', JSON.stringify(goalData));
+    updateSessionGoal();
+}
+
+function changeGoal() {
+    const newGoal = prompt('Set your daily goal (number of posts to master):', '5');
+    if (newGoal && !isNaN(newGoal) && parseInt(newGoal) > 0) {
+        const goalData = JSON.parse(localStorage.getItem('sessionGoal') || '{"target": 5, "date": "", "progress": 0}');
+        goalData.target = parseInt(newGoal);
+        localStorage.setItem('sessionGoal', JSON.stringify(goalData));
+        updateSessionGoal();
+    }
+}
+
+function celebrateGoal() {
+    // Simple celebration - you can enhance this later
+    const goalWidget = document.querySelector('.session-goal');
+    goalWidget.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    goalWidget.style.color = 'white';
+    
+    setTimeout(() => {
+        goalWidget.style.background = 'rgba(255, 255, 255, 0.95)';
+        goalWidget.style.color = '';
+    }, 3000);
+}
 function updateStreak(action) {
     const today = new Date().toDateString();
     const lastActive = localStorage.getItem('lastActiveDate');
@@ -763,6 +916,7 @@ function updateStreak(action) {
     post.style.opacity = '0.7';
     post.style.border = '2px solid #48dbfb';
     updateStats('known');
+    incrementGoalProgress(); // Track session goal progress        
     
     setTimeout(() => {
         loadNextPost();
@@ -821,7 +975,7 @@ async function initApp() {
     await fetchPosts();  // Add this line
     loadNextPost();
     updateStats('init'); // Initialize analytics display
-    
+    updateSessionGoal(); // Initialize session goal display
     // Load next post every 30 seconds for demo
     setInterval(() => {
         if (document.querySelectorAll('.post').length < 2) {
