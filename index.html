@@ -834,14 +834,45 @@ function changeGoal() {
 }
 
 function celebrateGoal() {
-    // Simple celebration - you can enhance this later
     const goalWidget = document.querySelector('.session-goal');
-    goalWidget.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-    goalWidget.style.color = 'white';
     
+    // Show celebration message
+    const celebrationMsg = document.createElement('div');
+    celebrationMsg.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: white;
+        padding: 30px 50px;
+        border-radius: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: celebration 0.5s ease-out;
+    `;
+    celebrationMsg.innerHTML = '🎉 Goal Complete! 🎉';
+    document.body.appendChild(celebrationMsg);
+    
+    // Flash the goal widget
+    goalWidget.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+    goalWidget.style.transform = 'scale(1.05)';
+    goalWidget.style.transition = 'all 0.3s ease';
+    
+    // Remove after 3 seconds
     setTimeout(() => {
+        celebrationMsg.style.opacity = '0';
+        celebrationMsg.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        celebrationMsg.style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+            celebrationMsg.remove();
+        }, 300);
+        
         goalWidget.style.background = 'rgba(255, 255, 255, 0.95)';
-        goalWidget.style.color = '';
+        goalWidget.style.transform = 'scale(1)';
     }, 3000);
 }
 function updateStreak(action) {
