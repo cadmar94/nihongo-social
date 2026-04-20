@@ -79,18 +79,22 @@
         }
 
         .post {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ff6b6b;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-left: 5px solid #ff6b6b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 
+                0 1px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
 
         .post:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+}
 
         .post-type {
             font-size: 12px;
