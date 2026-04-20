@@ -104,12 +104,20 @@
             margin-bottom: 10px;
         }
 
-        .japanese-text {
-            font-size: 20px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
-        }
+       .japanese-text {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    filter: blur(8px);
+    user-select: none;
+    transition: filter 0.3s ease;
+}
+
+.japanese-text.revealed {
+    filter: blur(0px);
+    user-select: auto;
+}
 
         .reading {
             font-size: 14px;
