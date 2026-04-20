@@ -743,21 +743,30 @@ preloadVoices(); // Try immediately
             }, 3000);
         }
 
-        function revealAudioFirstText(button) {
-            const post = button.closest('.post');
-            const japaneseText = post.querySelector('.japanese-text');
-            const audioFirstBtn = post.querySelector('.btn-audio-first');
-            
-            if (japaneseText.classList.contains('revealed')) {
-                // Hide text (blur it again)
-                japaneseText.classList.remove('revealed');
-                audioFirstBtn.textContent = '👁️ Show Text';
-            } else {
-                // Show text (remove blur)
-                japaneseText.classList.add('revealed');
-                audioFirstBtn.textContent = '🙈 Hide Text';
-            }
-        }
+       function revealAudioFirstText(button) {
+    const post = button.closest('.post');
+    const japaneseText = post.querySelector('.japanese-text');
+    const audioFirstBtn = post.querySelector('.btn-audio-first');
+    
+    if (japaneseText.classList.contains('revealed')) {
+        // Hide text (blur it again)
+        post.classList.add('flipping');
+        setTimeout(() => {
+            japaneseText.classList.remove('revealed');
+            audioFirstBtn.textContent = '👁 Show Text';
+            post.classList.remove('flipping');
+        }, 300);
+    } else {
+        // Show text (remove blur) with animation
+        post.classList.add('flipping');
+        setTimeout(() => {
+            japaneseText.classList.add('revealed', 'revealing');
+            audioFirstBtn.textContent = '🙈 Hide Text';
+            post.classList.remove('flipping');
+            setTimeout(() => japaneseText.classList.remove('revealing'), 500);
+        }, 300);
+    }
+}
 
         function revealTranslation(button) {
             const post = button.closest('.post');
