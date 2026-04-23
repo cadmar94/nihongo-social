@@ -420,6 +420,16 @@
   <span style="font-size: 0.7em;">(Nihongo Feed)</span>
 </h1>
         </div>
+<!-- Quiz Mode Toggle -->
+        <div class="mode-toggle-container">
+            <span class="mode-label">Browse Mode</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="quizModeToggle" onchange="toggleQuizMode()">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="mode-label">Quiz Mode</span>
+        </div>
+        
 <div class="filter-container" style="text-align: center; margin: 20px 0; padding: 0 20px;">
             <button class="filter-btn active" onclick="filterPosts('all')">All</button>
             <button class="filter-btn" onclick="filterPosts('daily-life')">Daily Life</button>
